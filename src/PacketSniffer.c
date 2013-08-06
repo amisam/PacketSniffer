@@ -32,8 +32,27 @@ int main(int argc, char *argv[]) {
 	// Set the filter
 	pcap_setfilter(iface, &fp);
 
-	// Start a capture (offline)
+	// Start a capture
+					//	(online)
+	p_t* iface;
+	success = pcap_findalldevs(&ifaceList ,errbuf);
+	descr = pcap_open_live(dev,BUFSIZ,1,-1,errbuf);
 
+					//	(offline)
+	char errbuf[PCAP_ERRBUF_SIZE];
+	pcap_t *pcap_open_offline(const char *fname, char *errbuf);
+
+	// Call pcap loop
+	void my_callback(u_char *args,const struct pcap_pkthdr* pkthdr,const u_char* packet){}
+	pcap_loop(iface,atoi(argv[1]), my_callback, args);
+
+	// Reading packet data
+	my_callback(u_char *args, const struct pcap_pkthdr* pkthdr, const u_char* packet)
+	struct ether_header *eptr;  		/* net/ethernet.h */
+	struct iphdr *ipptr; 		/* net/ipptr.h */
+	/* lets start with the ether header... */
+	eptr = (struct ether_header *) packet;
+	fprintf(stdout,"ethernet header source: %s", ether_ntoa((const struct ether_addr *)&eptr->ether_shost));
 
 	puts("End Program");
 	return EXIT_SUCCESS;

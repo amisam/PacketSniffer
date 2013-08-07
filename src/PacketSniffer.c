@@ -33,10 +33,10 @@ void call_IPv4(const u_char *);
 void call_IPv6(const u_char *);
 
 /*Protocol*/
-void call_TCP_P (const u_char *);
-void call_UDP_P (const u_char *);
-void call_ICMP_P(const u_char *);
-void call_IPv6_P(const u_char *, int);
+//void call_TCP_P (const u_char *);
+//void call_UDP_P (const u_char *);
+//void call_ICMP_P(const u_char *);
+//void call_IPv6_P(const u_char *, int);
 
 /*Payload*/
 void print_hex_ascii_line(const u_char *payload, int len, int offset);
@@ -122,6 +122,12 @@ void my_callback
 
 void call_IPv4(const u_char *packet){
 	const struct ip* ipHeader;
+	const struct tcphdr* tcpHeader;
+	const struct udphdr* udpHeader;
+	const struct icmp* icmpHeader;
+
+	int offset = 0;
+
 	ipHeader = (struct ip*)(packet + sizeof(struct ether_header));
 
 	printf(" Ether Type: IPv4\n");
@@ -140,10 +146,6 @@ void call_IPv4(const u_char *packet){
 	default:
 		break;
 	}*/
-	int offset = 0;
-	const struct tcphdr* tcpHeader;
-	const struct udphdr* udpHeader;
-	const struct icmp* icmpHeader;
 
 	switch(ipHeader->ip_p){
 	case IPPROTO_TCP:
@@ -250,7 +252,7 @@ void call_IPv6(const u_char *packet){
 
 /*===========================PROTOCOLS===========================*/
 /*===============================================================*/
-
+/*
 void call_TCP_P(const u_char *packet){
 	const struct ip* ipHeader;
 	const struct tcphdr* tcpHeader;
@@ -261,7 +263,7 @@ void call_TCP_P(const u_char *packet){
 	printf("   Src port: %i\n", ntohs(tcpHeader->source));
 	printf("   Dst port: %i\n", ntohs(tcpHeader->dest));
 
-	/* compute tcp payload (segment) size */
+	// compute tcp payload (segment) size
 	sizeof_payload(packet, ntohs(ipHeader->ip_len) - (sizeof(struct ip) + sizeof(struct tcphdr)),
 			(sizeof(struct ether_header) + sizeof(struct ip) + sizeof(struct tcphdr)));
 }
@@ -276,7 +278,7 @@ void call_UDP_P(const u_char *packet){
 	printf("   Src port: %i\n", ntohs(udpHeader->source));
 	printf("   Dst port: %i\n", ntohs(udpHeader->dest));
 
-	/* compute udp payload (segment) size */
+	// compute udp payload (segment) size
 	sizeof_payload(packet, ntohs(ipHeader->ip_len) - (sizeof(struct ip) + sizeof(struct udphdr)),
 			(sizeof(struct ether_header) + sizeof(struct ip) + sizeof(struct udphdr)));
 }
@@ -289,14 +291,11 @@ void call_ICMP_P(const u_char *packet){
 
 	printf("   Protocol: ICMP\n");
 
-	/* compute icmp payload (segment) size */
+	// compute icmp payload (segment) size
 	sizeof_payload(packet, ntohs(ipHeader->ip_len) - (sizeof(struct ip) + sizeof(struct icmp)),
 			(sizeof(struct ether_header) + sizeof(struct ip) + sizeof(struct icmp)));
 }
-
-void call_IPv6_P(const u_char *packet, int offset){
-
-}
+ */
 
 /*===========================PRINT_PAYLOAD===========================*/
 /*===================================================================*/
